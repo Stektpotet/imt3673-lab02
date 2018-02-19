@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">LAB 02 - RSS FEED</string>
+
+    <!-- RSS FEED strings -->
+        <!-- missing data defaults -->
+    <string name="feed_title_missing">Feed missing title&#8230;</string>
+    <string name="feed_description_missing">Feed missing description&#8230;</string>
+    <string name="feed_post_title_missing">Post missing title&#8230;</string>
+
+    <!-- Strings related to Settings -->
+    <string name="title_activity_settings">Preferences</string>
+
+    <!-- Options popup menu -->
+    <string name="action_settings">Preferences</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_about">About</string>
+
+    <string name="pref_feed_default_src">../../../../sampledata/rss/feed.xml</string>
+
+
+    <!-- Example General settings -->
+    <string name="pref_header_feed">Feed</string>
+    <string name="pref_header_UI">User Interface</string>
+
+    <!-- DisplayActivity -->
+    <string name="title_activity_display">@string/feed_post_title_missing</string> <!-- TODO: edit in runtime per post -->
+
+    <!-- Feed settings -->
+    <string name="pref_feed_fetch_count_desc">Number of posts displayed in the list</string>
+    <string name="pref_feed_auto_fetch">Automatic updates</string>
+    <string name="pref_feed_auto_fetch_description">Polls rss-feed at a set interval</string>
+
+    <string-array name="pref_rss_fetch_frequency">
+        <item>10 minutes</item>
+        <item>60 minutes</item>
+        <item>12 hours</item>
+        <item>Once a day</item>
+    </string-array>
+
+    <string-array name="pref_feed_fetch_count">
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="some_data">
+        <item>
+            <title>Post #1</title>
+            <link>https://github.com/Stektpotet/</link>
+            <description>this is post nr one</description>
+        </item>
+        <item>
+            <title>Post #2</title>
+            <link>https://github.com/Stektpotet/</link>
+            <description>this is post nr two</description>
+        </item>
+    </string-array>
+
+</resources>

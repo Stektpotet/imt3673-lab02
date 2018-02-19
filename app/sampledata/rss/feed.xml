@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+    <channel>
+        <title>Sample data feed</title>
+        <link>https://github.com/Stektpotet/</link>
+        <description>A simple sample rss feed</description>
+        <item>
+            <title>Post #1</title>
+            <link>https://github.com/Stektpotet/</link>
+            <description>this is post nr one</description>
+        </item>
+        <item>
+            <title>Post #2</title>
+            <link>https://github.com/Stektpotet/</link>
+            <description>this is post nr two</description>
+        </item>
+    </channel>
+
+</rss>
