@@ -23,7 +23,7 @@
     <string name="pref_header_UI">User Interface</string>
 
     <!-- DisplayActivity -->
-    <string name="title_activity_display">@string/feed_post_title_missing</string> <!-- TODO: edit in runtime per post -->
+    <string name="title_activity_display">INSERT TITLE HERE</string> <!-- TODO: edit in runtime per post -->
 
     <!-- Feed settings -->
     <string name="pref_feed_fetch_count_desc">Number of posts displayed in the list</string>
