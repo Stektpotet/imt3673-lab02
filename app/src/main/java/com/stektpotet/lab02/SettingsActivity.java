@@ -144,7 +144,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || feedPreferenceFragment.class.getName().equals(fragmentName)
+                || FeedPreferenceFragment.class.getName().equals(fragmentName)
                 || userInterfacePreferenceFragment.class.getName().equals(fragmentName);
     }
 
@@ -153,7 +153,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class feedPreferenceFragment extends PreferenceFragment {
+    public static class FeedPreferenceFragment extends PreferenceFragment {
+
+        public static final String PREF_FEED_SOURCE = "feed_src";
+        public static final String PREF_FEED_ENTRY_LIMIT = "feed_post_limit";
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -164,8 +168,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("feed_src"));
-            bindPreferenceSummaryToValue(findPreference("feed_post_limit"));
+            bindPreferenceSummaryToValue(findPreference(PREF_FEED_SOURCE));
+            bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_LIMIT));
             //bindPreferenceSummaryToValue(findPreference("auto_fetch")); //TODO learn why this does not need to be done...
         }
 

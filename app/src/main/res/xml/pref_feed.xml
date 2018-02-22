@@ -15,7 +15,6 @@
         android:summary="@string/pref_feed_fetch_count_desc"/>
 
     <SwitchPreference
-
         android:key="auto_fetch"
         android:title="@string/pref_feed_auto_fetch" />
 

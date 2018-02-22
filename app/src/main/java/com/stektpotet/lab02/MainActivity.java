@@ -22,10 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView mFeedPostList;
     private TextView mFeedTitle, mFeedDescription;
 
-
-    private String feedSourceURL;
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +36,12 @@ public class MainActivity extends AppCompatActivity {
         mFeedTitle = findViewById(R.id.main_txt_feed_title);
         mFeedDescription = findViewById(R.id.main_txt_feed_desc);
 
-        //grab the source url from preferences
-        feedSourceURL = PreferenceManager.getDefaultSharedPreferences(this).getString("feed_src", "");
-        mFeedDescription.setText(feedSourceURL);
-
         //Set up intent...
         Intent feedFetcherServiceIntent = new Intent(MainActivity.this, FeedFetcherService.class);
         feedFetcherServiceIntent.setAction(Intent.ACTION_GET_CONTENT); //TODO verify this action
         feedFetcherServiceIntent.setFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);
-        feedFetcherServiceIntent.setData(Uri.parse(feedSourceURL));
 
-//        startService(feedFetcherServiceIntent);
+        startService(feedFetcherServiceIntent);
 
         refreshFeed();
     }
@@ -63,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        mFeedDescription.setText(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("feed_src", ""));
     }
 
 //    private void updateMetaDataFields() {
@@ -90,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
      **/
     private void refreshFeed() {
         //TODO Fetch the feed
-
         Toast.makeText(getBaseContext(), "Fetching...",Toast.LENGTH_LONG).show();
     }
 

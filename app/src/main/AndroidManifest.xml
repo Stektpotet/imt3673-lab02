@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stektpotet.lab02">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +36,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.stektpotet.lab02.MainActivity" />
         </activity>
-
         <service
             android:name=".FeedFetcherService"
             android:exported="false"></service>

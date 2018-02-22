@@ -1,7 +1,23 @@
 package com.stektpotet.lab02;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.net.URL;
 
 
 /**
@@ -26,9 +42,28 @@ public class FeedFetcherService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String dataString = intent.getDataString();
+        if (intent.getAction() == Intent.ACTION_GET_CONTENT) {
 
+            ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+            assert connectivityManager != null;
+            if(connectivityManager.getNetworkInfo(connectivityManager.getActiveNetwork()).isConnected()) {
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String url = sharedPreferences.getString(SettingsActivity.FeedPreferenceFragment.PREF_FEED_SOURCE, null);
+
+                Log.d("SERVICE.FEED_FETCH", url);
+
+                try {
+                    InputStream inStream = new URL(url).openConnection().getInputStream();
+                    File feedFile = inputStreamToFile(inStream);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                Toast.makeText(getApplicationContext(),"Unable to fetch feed, no internet connection!", Toast.LENGTH_LONG).show();
+            }
 
 
 
@@ -44,6 +79,40 @@ public class FeedFetcherService extends IntentService {
             }
         }
     }
+
+
+    private File inputStreamToFile(InputStream inputStream) {
+        File file = null;
+        FileOutputStream writeFileStream;
+        try {
+            byte[] buffer = new byte[inputStream.available()];
+            inputStream.read(buffer); //dump everything into the buffer
+
+            // TODO: DELETE PREVIOUS BEFORE WRITE IF EXISTS
+            file = File.createTempFile("feed_cache", null, getApplicationContext().getCacheDir());
+            writeFileStream = new FileOutputStream(file);
+
+            writeFileStream.write(buffer); //dump the buffer over into the file
+            writeFileStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+//    private File cacheFeedToFile(Context context, String url) {
+//        File file;
+//        try {
+//            String fileName = Uri.parse(url).getLastPathSegment();
+//            file = File.createTempFile(fileName, null, context.getCacheDir());
+//        } catch (IOException e) {
+//            // Error while creating file
+//        }
+//        return file;
+//    }
+
+
 
     /**
      * Handle action Foo in the provided background thread with the provided
