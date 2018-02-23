@@ -16,19 +16,20 @@
     <string name="action_about">About</string>
 
     <string name="pref_feed_default_src">http://www.feedforall.com/sample.xml</string>
-    
+
 
     <!-- Example General settings -->
     <string name="pref_header_feed">Feed</string>
     <string name="pref_header_UI">User Interface</string>
 
     <!-- DisplayActivity -->
-    <string name="title_activity_display">INSERT TITLE HERE</string> <!-- TODO: edit in runtime per post -->
+    <string name="title_activity_display">INSERT TITLE HERE</string>
 
     <!-- Feed settings -->
     <string name="pref_feed_fetch_count_desc">Number of posts displayed in the list</string>
+    <string name="pref_feed_fetch_frequency_desc">Frequency of pulling in new posts</string>
     <string name="pref_feed_auto_fetch">Automatic updates</string>
-    <string name="pref_feed_auto_fetch_description">Polls rss-feed at a set interval</string>
+    <string name="pref_feed_auto_fetch_desc">Polls rss-feed at a set interval</string>
 
     <string-array name="pref_rss_fetch_frequency">
         <item>10 minutes</item>
@@ -36,6 +37,13 @@
         <item>12 hours</item>
         <item>Once a day</item>
     </string-array>
+    <string-array name="pref_rss_fetch_frequency_values">
+        <item>10000</item>
+        <item>3600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
+
 
     <string-array name="pref_feed_fetch_count">
         <item>10</item>

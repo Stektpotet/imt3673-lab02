@@ -36,9 +36,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.stektpotet.lab02.MainActivity" />
         </activity>
+
         <service
             android:name=".FeedFetcherService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <receiver android:name=".FeedFetcherSignalReceiver" />
     </application>
 
 </manifest>

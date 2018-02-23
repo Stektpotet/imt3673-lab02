@@ -1,6 +1,10 @@
 package com.stektpotet.lab02.parser.Atom;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.stektpotet.lab02.parser.Feed;
+import com.stektpotet.lab02.parser.FeedParser;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -13,88 +17,32 @@ import java.util.List;
 /**
  * AtomFeed -
  */
-public class AtomFeed implements Feed<AtomFeed> {
+public class AtomFeed extends Feed<AtomEntry> {
 
     public static final String TAG_FEED = "feed";
+    public static final String TAG_ENTRY = AtomEntry.TAG_ENTRY;
     public static final String TAG_GENERATOR = "generator";
     public static final String TAG_ICON = "icon";
     public static final String TAG_LOGO = "logo";
     public static final String TAG_RIGHTS = "rights";
     public static final String TAG_SUBTITLE = "subtitle";
 
-
-
-    public final URI    id      = null;
-    public final String title   = null;
-    public final String updated = null;
-
-    public class Entry {
-        public String id;
-        public String title;
-        public String updated;
-        public String link;
-
-        public List<String> Categories;
-        public List<String> Contributor;
-        public Entry() {}
-        public Entry(String id, String title, String updated) {
-            this.id = id; this.title = title; this.updated = updated;
-        }
-
+    AtomFeed(String title, String link, ArrayList<AtomEntry> entries) /*Insert additional parameters*/ {
+        super(title, link, entries);
     }
 
-    public List<Entry> entries = new ArrayList<>();
-    private AtomFeed(String title, String link) /*Insert additional parameters*/ {
-
-    }
-
-    public static AtomFeed read(XmlPullParser parser, int maxItems) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, null, TAG_FEED);
-        String title = "", updated = "", id = "", link = "";
-
-
-        while(parser.nextTag() == XmlPullParser.START_TAG) {
-            String tag = parser.getName();
-            switch (tag) {
-                case TAG_TITLE:
-                    title = readText(parser,TAG_TITLE); break;
-                case TAG_LINK:
-                    link = readText(parser, TAG_LINK); break;
-                default:
-                    skip(parser);
-            }
+    protected AtomFeed(Parcel in) { super(in); }
+    public static final Creator<AtomFeed> CREATOR = new Creator<AtomFeed>() {
+        @Override
+        public AtomFeed createFromParcel(Parcel in) {
+            return new AtomFeed(in);
         }
-        return new AtomFeed(title,link);
-    }
 
-    private static String readText(XmlPullParser parser, String tag) throws XmlPullParserException, IOException {
-        String text = "";
-        parser.require(XmlPullParser.START_TAG, null, tag);
-        if (parser.next() == XmlPullParser.TEXT) {
-            text = parser.getText();
-            parser.nextTag();
+        @Override
+        public AtomFeed[] newArray(int size) {
+            return new AtomFeed[size];
         }
-        parser.require(XmlPullParser.END_TAG, null, tag);
-        return text;
-    }
-
-    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-                case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
-            }
-        }
-    }
-
+    };
 //
 //
 //    public static final String TAG_FEED = "feed";
@@ -117,9 +65,6 @@ public class AtomFeed implements Feed<AtomFeed> {
 //    public static final String TAG_ENTRY = "entry";
 //
 //    public static final String TAG_ENTRY_CONTENT = "content";
-/*
-========================================================================================
-*/
 
 
 }

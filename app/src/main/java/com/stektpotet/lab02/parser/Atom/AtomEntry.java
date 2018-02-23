@@ -1,6 +1,10 @@
 package com.stektpotet.lab02.parser.Atom;
 
+import android.os.Parcel;
+
 import com.stektpotet.lab02.parser.FeedEntry;
+import com.stektpotet.lab02.parser.FeedParser;
+import com.stektpotet.lab02.parser.RSS.RSSEntry;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -11,24 +15,26 @@ import java.io.IOException;
  * Created by halvor on 22.02.18.
  */
 
-public class AtomEntry implements FeedEntry<AtomEntry> {
+public class AtomEntry extends FeedEntry {
 
     public static final String TAG_ENTRY = "entry";
     public static final String TAG_CONTRIBUTOR = "contributor";
     public static final String TAG_RIGHTS = "rights";
 
-    public static AtomEntry readEntry(XmlPullParser parser) throws IOException, XmlPullParserException {
+    AtomEntry(String title, String link) {
+        super(title, link);
+    }
 
-        parser.require(XmlPullParser.START_TAG, null, TAG_ENTRY);
-        while (parser.nextTag() == XmlPullParser.START_TAG) {
-            String tag = parser.getName();
-            switch (tag) {
-                case FeedEntry.TAG_ID:
-
-                case FeedEntry.TAG_TITLE:
-            }
+    public AtomEntry(Parcel in) { super(in); }
+    public static final Creator<AtomEntry> CREATOR = new Creator<AtomEntry>() {
+        @Override
+        public AtomEntry createFromParcel(Parcel in) {
+            return new AtomEntry(in);
         }
 
-        return null;
-    }
+        @Override
+        public AtomEntry[] newArray(int size) {
+            return new AtomEntry[size];
+        }
+    };
 }

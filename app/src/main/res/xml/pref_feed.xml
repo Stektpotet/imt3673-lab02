@@ -14,6 +14,14 @@
         android:entryValues="@array/pref_feed_fetch_count"
         android:summary="@string/pref_feed_fetch_count_desc"/>
 
+    <ListPreference
+        android:title="Refresh-Frequency"
+        android:defaultValue="10000"
+        android:key="feed_post_frequency"
+        android:entries="@array/pref_rss_fetch_frequency"
+        android:entryValues="@array/pref_rss_fetch_frequency_values"
+        android:summary="@string/pref_feed_fetch_count_desc"/>
+
     <SwitchPreference
         android:key="auto_fetch"
         android:title="@string/pref_feed_auto_fetch" />

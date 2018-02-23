@@ -1,18 +1,30 @@
 package com.stektpotet.lab02;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.stektpotet.lab02.parser.Feed;
+import com.stektpotet.lab02.parser.FeedEntry;
+import com.stektpotet.lab02.parser.FeedParser;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,31 +52,20 @@ public class FeedFetcherService extends IntentService {
         super("FeedFetcherService");
     }
 
+    private PendingIntent repeatFetchIntent;
+
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent.getAction() == Intent.ACTION_GET_CONTENT) {
 
-            ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-            assert connectivityManager != null;
-            if(connectivityManager.getNetworkInfo(connectivityManager.getActiveNetwork()).isConnected()) {
+            Intent fetchIntent = new Intent(this, FeedFetcherSignalReceiver.class);
+            repeatFetchIntent = PendingIntent.getBroadcast(this, 0,fetchIntent, 0);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            Log.d("Something", sharedPreferences.getString(SettingsActivity.FeedPreferenceFragment.PREF_FEED_ENTRY_FREQUENCY, ""));
+//            int feedRefreshFrequency = Integer.parseInt(sharedPreferences.getString(SettingsActivity.FeedPreferenceFragment.PREF_FEED_ENTRY_FREQUENCY, "1000"));
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String url = sharedPreferences.getString(SettingsActivity.FeedPreferenceFragment.PREF_FEED_SOURCE, null);
-
-                Log.d("SERVICE.FEED_FETCH", url);
-
-                try {
-                    InputStream inStream = new URL(url).openConnection().getInputStream();
-                    File feedFile = inputStreamToFile(inStream);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                Toast.makeText(getApplicationContext(),"Unable to fetch feed, no internet connection!", Toast.LENGTH_LONG).show();
-            }
-
+            Log.d("RECIEVER.init", "WATWAT");
+            startBroadcast(10000);
 
 
             final String action = intent.getAction();
@@ -80,19 +81,28 @@ public class FeedFetcherService extends IntentService {
         }
     }
 
+    private void startBroadcast(int interval) {
+        AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
+        Log.d("RECIEVER.broadcast.send", "WATWAT");
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, repeatFetchIntent);
+        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+    }
+
 
     private File inputStreamToFile(InputStream inputStream) {
         File file = null;
         FileOutputStream writeFileStream;
         try {
-            byte[] buffer = new byte[inputStream.available()];
-            inputStream.read(buffer); //dump everything into the buffer
-
             // TODO: DELETE PREVIOUS BEFORE WRITE IF EXISTS
             file = File.createTempFile("feed_cache", null, getApplicationContext().getCacheDir());
             writeFileStream = new FileOutputStream(file);
+            Log.d("FILEWRITE.location", file.getAbsolutePath());
+            int read = 0;
+            byte[] bytes = new byte[4096];
 
-            writeFileStream.write(buffer); //dump the buffer over into the file
+            while ((read = inputStream.read(bytes)) != -1) {
+                writeFileStream.write(bytes, 0, read);
+            }
             writeFileStream.close();
 
         } catch (IOException e) {
@@ -100,19 +110,6 @@ public class FeedFetcherService extends IntentService {
         }
         return file;
     }
-
-//    private File cacheFeedToFile(Context context, String url) {
-//        File file;
-//        try {
-//            String fileName = Uri.parse(url).getLastPathSegment();
-//            file = File.createTempFile(fileName, null, context.getCacheDir());
-//        } catch (IOException e) {
-//            // Error while creating file
-//        }
-//        return file;
-//    }
-
-
 
     /**
      * Handle action Foo in the provided background thread with the provided

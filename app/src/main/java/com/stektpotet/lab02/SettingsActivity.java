@@ -55,8 +55,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
+            } else {
+                preference.setSummary(value);
             }
-            preference.setSummary(value);
         }
 
     };
@@ -157,6 +158,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         public static final String PREF_FEED_SOURCE = "feed_src";
         public static final String PREF_FEED_ENTRY_LIMIT = "feed_post_limit";
+        public static final String PREF_FEED_ENTRY_FREQUENCY = "feed_post_frequency";
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -170,6 +172,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_SOURCE));
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_LIMIT));
+            bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_FREQUENCY));
             //bindPreferenceSummaryToValue(findPreference("auto_fetch")); //TODO learn why this does not need to be done...
         }
 

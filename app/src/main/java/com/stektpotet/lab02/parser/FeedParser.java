@@ -8,37 +8,35 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.stektpotet.lab02.parser.Atom.AtomFeed;
+import com.stektpotet.lab02.parser.Atom.AtomFeedParser;
+import com.stektpotet.lab02.parser.RSS.RSSFeed;
+import com.stektpotet.lab02.parser.RSS.RSSFeedParser;
 
 /**
  * FeedP - Created by halvor on 19.02.18.
  */
 public class FeedParser {
 
-    private static final String NAMESPACE = null;
-
-    private static final String RSS_2 = "rss";
-    private static final String ATOM = "feed";
-
-
-    public Feed parse(InputStream in, int maxItems) throws  XmlPullParserException, IOException {
-
-        Hashtable<String, ArrayList<String>> tags = new Hashtable<>();
-        String tagName;
+    public static Feed parse(InputStream in, int maxItems) throws  XmlPullParserException, IOException {
         XmlPullParser parser = Xml.newPullParser();
-
         try {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, NAMESPACE);
+            parser.setInput(in, XmlPullParser.NO_NAMESPACE);
 
             while (parser.next() != XmlPullParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlPullParser.START_TAG) {
                     switch (parser.getName())
                     {
                         case AtomFeed.TAG_FEED:
-                            return AtomFeed.read(parser, maxItems);
+                            Log.d("FEED_PARSING.parse", "Parsing as ATOM feed!");
+                            return AtomFeedParser.parse(parser, maxItems);
+                        case RSSFeed.TAG_RSS:
+                            Log.d("FEED_PARSING.parse", "Parsing as RSS feed!");
+                            return RSSFeedParser.parse(parser, maxItems);
                     }
                 }
 
@@ -49,5 +47,42 @@ public class FeedParser {
         return null;
     }
 
+
+    public static String readText(XmlPullParser parser, String tag) throws XmlPullParserException, IOException {
+        String text = "";
+        parser.require(XmlPullParser.START_TAG, XmlPullParser.NO_NAMESPACE, tag);
+        if (parser.next() == XmlPullParser.TEXT) {
+            text = parser.getText();
+            Log.d("FEED_PARSING.read_text."+tag, text);
+            parser.nextTag();
+        }
+        parser.require(XmlPullParser.END_TAG, XmlPullParser.NO_NAMESPACE, tag);
+        return text;
+    }
+
+    /**
+     * @param parser - current parser in the state where the current tag is the one you want to skip
+     * @throws XmlPullParserException
+     * @throws IOException
+     *
+     * See <a href="https://developer.android.com/training/basics/network-ops/xml.html#skip">
+     */
+    public static void skipTag(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException(parser.getName() + " TAG: " + parser.getEventType());
+        }
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    Log.d("FEED_PARSING.skip_tag."+parser.getName(), ""+parser.getText());
+                    break;
+            }
+        }
+    }
 }
 

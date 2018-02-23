@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView mFeedPostList;
     private TextView mFeedTitle, mFeedDescription;
 
+    private Intent feedFetcherServiceIntent;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mFeedDescription = findViewById(R.id.main_txt_feed_desc);
 
         //Set up intent...
-        Intent feedFetcherServiceIntent = new Intent(MainActivity.this, FeedFetcherService.class);
+        feedFetcherServiceIntent = new Intent(MainActivity.this, FeedFetcherService.class);
         feedFetcherServiceIntent.setAction(Intent.ACTION_GET_CONTENT); //TODO verify this action
         feedFetcherServiceIntent.setFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);
 
@@ -54,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mFeedDescription.setText(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("feed_src", ""));
+        stopService(feedFetcherServiceIntent);
+        startService(feedFetcherServiceIntent);
     }
 
 //    private void updateMetaDataFields() {
