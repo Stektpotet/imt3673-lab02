@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Xml;
 
@@ -21,11 +22,12 @@ import com.stektpotet.lab02.parser.RSS.RSSFeedParser;
  */
 public class FeedParser {
 
+    @Nullable
     public static Feed parse(InputStream in, int maxItems) throws  XmlPullParserException, IOException {
         XmlPullParser parser = Xml.newPullParser();
         try {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, XmlPullParser.NO_NAMESPACE);
+            parser.setInput(in, null);
 
             while (parser.next() != XmlPullParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlPullParser.START_TAG) {

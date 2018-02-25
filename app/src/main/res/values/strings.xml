@@ -15,8 +15,6 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_about">About</string>
 
-    <string name="pref_feed_default_src">http://www.feedforall.com/sample.xml</string>
-
 
     <!-- Example General settings -->
     <string name="pref_header_feed">Feed</string>
@@ -26,6 +24,11 @@
     <string name="title_activity_display">INSERT TITLE HERE</string>
 
     <!-- Feed settings -->
+        <!--Defaults-->
+    <string name="pref_feed_default_src">http://www.feedforall.com/sample.xml</string>
+    <string name="pref_feed_default_frequency">"10"</string>
+
+        <!--Summaries-->
     <string name="pref_feed_fetch_count_desc">Number of posts displayed in the list</string>
     <string name="pref_feed_fetch_frequency_desc">Frequency of pulling in new posts</string>
     <string name="pref_feed_auto_fetch">Automatic updates</string>
@@ -37,11 +40,11 @@
         <item>12 hours</item>
         <item>Once a day</item>
     </string-array>
-    <string-array name="pref_rss_fetch_frequency_values">
-        <item>10000</item>
-        <item>3600000</item>
-        <item>43200000</item>
-        <item>86400000</item>
+    <string-array name="pref_rss_fetch_frequency_values"> <!--NOTE multiply by 60000 for ms conversion-->
+        <item>10</item>
+        <item>60</item>
+        <item>720</item>
+        <item>1440</item>
     </string-array>
 
 

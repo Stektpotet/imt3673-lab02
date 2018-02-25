@@ -12,6 +12,8 @@ import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
@@ -30,6 +32,11 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    public static final String PREF_FEED_SOURCE = "feed_src";
+    public static final String PREF_FEED_AUTO_FETCH = "feed_auto_fetch";
+    public static final String PREF_FEED_ENTRY_LIMIT = "feed_post_limit";
+    public static final String PREF_FEED_ENTRY_FREQUENCY = "feed_post_frequency";
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -38,11 +45,31 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String preferenceValueString = value.toString();
-            UpdatePreferenceSummary(preference, preferenceValueString);
+//            if(!updateDependentPreferences(preference, preferenceValueString)) {
+//                Log.d("PREF.updateDependent", "RETURN FALSE");
+//                return false;
+//            }
+            updatePreferenceSummary(preference, preferenceValueString);
+            Log.d("PREF.updateDependent", "RETURN TRUE");
             return true;
         }
 
-        private void UpdatePreferenceSummary(Preference preference, String value) {
+        private boolean updateDependentPreferences(Preference preference, String value) {
+            switch (preference.getKey())
+            {
+//                case PREF_FEED_SOURCE:
+//                    Log.d("PREF.updateDependent.url", value);
+//                    boolean validURL = Patterns.WEB_URL.matcher(value).matches(); //TODO: use URLUtils
+//                    preference.notifyDependencyChange(!validURL);
+//                    return validURL;
+                default:
+
+                    Log.d("PREF.updateDependent."+preference.getKey(), value);
+                    return true;
+            }
+        }
+
+        private void updatePreferenceSummary(Preference preference, String value) {
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
@@ -51,10 +78,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 int index = listPreference.findIndexOfValue(value);
 
                 // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
             } else {
                 preference.setSummary(value);
             }
@@ -146,7 +170,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || FeedPreferenceFragment.class.getName().equals(fragmentName)
-                || userInterfacePreferenceFragment.class.getName().equals(fragmentName);
+                || UserInterfacePreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -155,10 +179,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class FeedPreferenceFragment extends PreferenceFragment {
-
-        public static final String PREF_FEED_SOURCE = "feed_src";
-        public static final String PREF_FEED_ENTRY_LIMIT = "feed_post_limit";
-        public static final String PREF_FEED_ENTRY_FREQUENCY = "feed_post_frequency";
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -173,7 +193,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_SOURCE));
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_LIMIT));
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_FREQUENCY));
-            //bindPreferenceSummaryToValue(findPreference("auto_fetch")); //TODO learn why this does not need to be done...
+            //bindPreferenceSummaryToValue(findPreference("PREF_FEED_AUTO_FETCH")); //TODO learn why this does not need to be done...
         }
 
         @Override
@@ -192,7 +212,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class userInterfacePreferenceFragment extends PreferenceFragment {
+    public static class UserInterfacePreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
