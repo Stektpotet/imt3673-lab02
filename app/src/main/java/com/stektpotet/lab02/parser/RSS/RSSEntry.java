@@ -19,12 +19,26 @@ import java.io.IOException;
 public class RSSEntry extends FeedEntry implements Parcelable {
 
     public static final String TAG_ITEM = "item";
+    public static final String TAG_DESCRIPTION = "description";
 
-    RSSEntry(String title, String link) {
-        super(title, link);
+    public final String description;
+
+    RSSEntry(String... args) {
+        super(args[0], args[1]);
+        description = args[2];
     }
 
-    public RSSEntry(Parcel in) { super(in); }
+    public RSSEntry(Parcel in) {
+        super(in);
+        description = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        super.writeToParcel(parcel, i);
+        parcel.writeString(description);
+    }
+
     public static final Creator<RSSEntry> CREATOR = new Creator<RSSEntry>() {
         @Override
         public RSSEntry createFromParcel(Parcel in) {

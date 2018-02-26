@@ -39,7 +39,6 @@ public class FeedFetcherService extends IntentService {
 
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String ACTION_FEED_FETCH = "com.stektpotet.lab02.action.FEED_FETCH";
-    public static final String ACTION_FEED_FETCH_COMPLETE ="com.stektpotet.lab02.action.FEED_FETCH_COMPLETE";
 
     // TODO: Rename parameters
     public static final String EXTRA_PARAM1 = "com.stektpotet.lab02.extra.PARAM1";
@@ -100,7 +99,7 @@ public class FeedFetcherService extends IntentService {
 
         completionIntent.putExtra(FeedFetcherSignalReceiver.PARAM_FEED_FILE_PATH, cachedFilePath);
 
-        completionIntent.setAction(ACTION_FEED_FETCH_COMPLETE);
+        completionIntent.setAction(FeedFetcherSignalReceiver.ACTION_FEED_FETCH_COMPLETE);
         sendBroadcast(completionIntent);
     }
 

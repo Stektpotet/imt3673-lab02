@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stektpotet.lab02.DisplayActivity$PlaceholderFragment">
+    tools:context="com.stektpotet.lab02.DisplayActivity$FeedEntryDisplayFragment">
 
     <WebView
         android:id="@+id/frag_display_entry_view"

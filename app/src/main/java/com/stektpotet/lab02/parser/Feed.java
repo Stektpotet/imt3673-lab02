@@ -27,10 +27,10 @@ public abstract class Feed<T extends FeedEntry> implements Parcelable {
     public final String link;
     public final List<T> elements;
 
-    protected Feed(String title, String link, ArrayList<T> list) {
+    protected Feed(ArrayList<T> list, String title, String link) {
+        this.elements = list;
         this.title = title;
         this.link = link;
-        this.elements = list;
     }
 
     protected Feed(Parcel in) {

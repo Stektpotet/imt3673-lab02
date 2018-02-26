@@ -4,18 +4,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/feed_item_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_colorAccent" />
 
     <TextView
         android:id="@+id/feed_item_preview"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        />
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_colorPrimary" />
 
 </LinearLayout>

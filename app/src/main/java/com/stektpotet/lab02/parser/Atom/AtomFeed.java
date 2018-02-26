@@ -21,14 +21,15 @@ public class AtomFeed extends Feed<AtomEntry> {
 
     public static final String TAG_FEED = "feed";
     public static final String TAG_ENTRY = AtomEntry.TAG_ENTRY;
+    public static final String TAG_ID = "id";
     public static final String TAG_GENERATOR = "generator";
     public static final String TAG_ICON = "icon";
     public static final String TAG_LOGO = "logo";
     public static final String TAG_RIGHTS = "rights";
     public static final String TAG_SUBTITLE = "subtitle";
 
-    AtomFeed(String title, String link, ArrayList<AtomEntry> entries) /*Insert additional parameters*/ {
-        super(title, link, entries);
+    AtomFeed(ArrayList<AtomEntry> entries, String... args) /*Insert additional parameters*/ {
+        super(entries, args[0], args[1]);
     }
 
     protected AtomFeed(Parcel in) { super(in); }

@@ -24,7 +24,6 @@ public abstract class FeedEntry implements Parcelable {
     public final String title;
     public final String link;
 
-
     protected FeedEntry(String title, String link) {
         this.title = title;
         this.link = link;

@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.stektpotet.lab02.parser.FeedEntry;
+import com.stektpotet.lab02.parser.RSS.RSSEntry;
 
 import java.util.List;
 
@@ -37,7 +38,11 @@ public class FeedListAdapter extends ArrayAdapter<FeedEntry> {
         TextView preview = (TextView) convertView.findViewById(R.id.feed_item_preview);
         // Populate the data into the template view using the data object
         title.setText(item.title);
-        preview.setText(item.link);
+        if(item instanceof RSSEntry) {
+            preview.setText(((RSSEntry)item).description);
+        } else {
+            preview.setText(item.link);
+        }
         // Return the completed view to render on screen
         return convertView;
     }

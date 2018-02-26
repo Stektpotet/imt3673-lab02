@@ -9,11 +9,24 @@
     tools:context="com.stektpotet.lab02.DisplayActivity">
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/display_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
     </android.support.v4.view.ViewPager>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp">
+
+        <ProgressBar
+            android:id="@+id/display_progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="-3dp"
+            android:progress="20"/>
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

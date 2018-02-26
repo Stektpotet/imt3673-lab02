@@ -21,6 +21,7 @@ import com.stektpotet.lab02.parser.FeedParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,35 +38,61 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class FeedFetcherSignalReceiver extends BroadcastReceiver {
 
-    private Runnable updateCallback;
+    public static final String TAG = FeedFetcherSignalReceiver.class.getName();
 
+    private Runnable updateCallback;
+    public Feed lastProcessedFeed;
     public FeedFetcherSignalReceiver(Runnable callback) {
         updateCallback = callback;
     }
 
-    public Feed lastProcessedFeed;
-
-    public static final String TAG = FeedFetcherSignalReceiver.class.getName();
+    public static final String ACTION_FEED_FETCH_COMPLETE ="com.stektpotet.lab02.action.FEED_FETCH_COMPLETE";
+    public static final String ACTION_FEED_FETCH_FIND_CACHE ="com.stektpotet.lab02.action.FEED_FETCH_FIND_CACHE";
 
     public static final String PARAM_FEED_FILE_PATH = TAG + ".extras.PARAM_FEED_FILE_PATH";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        //TODO: use intentActions
-
         Bundle extras = intent.getExtras();
-
-        String filePath = extras.getString(PARAM_FEED_FILE_PATH);
-
-        Log.d(TAG + ".onReceive", "Recieved!");
-        Toast.makeText(context,"TOAST from FeedFetcherSignalReceiver!", Toast.LENGTH_LONG).show();
-
         String itemMax = PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(SettingsActivity.PREF_FEED_ENTRY_LIMIT, "10");
 
-        new FeedProcessor().execute(filePath, itemMax);
+        //TODO: use intentActions
+        switch (intent.getAction())
+        {
+            case ACTION_FEED_FETCH_COMPLETE:
+                String filePath = extras.getString(PARAM_FEED_FILE_PATH);
+                new FeedProcessor().execute(filePath, itemMax);
+                break;
+            case ACTION_FEED_FETCH_FIND_CACHE:
+
+                File feedCacheDir = new File(context.getCacheDir(), "feed");
+                if(!feedCacheDir.exists() || !feedCacheDir.isDirectory()) {
+                    break;
+                }
+                File[] files = feedCacheDir.listFiles(new FileFilter() {
+                    public boolean accept(File file) {
+                        return file.isFile();
+                    }
+                });
+
+                if(files.length > 0) {
+                    File mostRecent = files[0];
+
+                    for(File f : files) {
+                        if(f.lastModified() < mostRecent.lastModified()) {
+                            mostRecent = f;
+                        }
+                    }
+                    new FeedProcessor().execute(mostRecent.getPath(), itemMax);
+                }
+                break;
+        }
+
+        Log.d(TAG + ".onReceive", "Recieved!");
+
+
     }
 
     public class FeedProcessor extends AsyncTask<String, Integer, Feed> {

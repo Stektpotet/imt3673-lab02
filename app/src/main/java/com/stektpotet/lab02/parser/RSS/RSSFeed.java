@@ -23,12 +23,33 @@ public class RSSFeed extends Feed<RSSEntry> implements Parcelable {
     public static final String TAG_RSS = "rss";
     public static final String TAG_CHANNEL = "channel";
     public static final String TAG_ITEM = RSSEntry.TAG_ITEM;
+    public static final String TAG_DESCRIPTION = "description";
 
-    RSSFeed(String title, String link, ArrayList<RSSEntry> list) {
-        super(title, link, list);
+    public final String description;
+
+    RSSFeed(ArrayList<RSSEntry> list, String... args) {
+        super(list, args[0], args[1]);
+        this.description = args[2];
     }
 
-    protected RSSFeed(Parcel in) { super(in); }
+
+    protected RSSFeed(Parcel in) {
+        super(in);
+        description = in.readString();
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(description);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<RSSFeed> CREATOR = new Creator<RSSFeed>() {
         @Override
         public RSSFeed createFromParcel(Parcel in) {
@@ -40,4 +61,5 @@ public class RSSFeed extends Feed<RSSEntry> implements Parcelable {
             return new RSSFeed[size];
         }
     };
+
 }

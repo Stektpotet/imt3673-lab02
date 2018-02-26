@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Objects;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.stektpotet.lab02.parser.RSS.RSSFeedParser;
  * FeedP - Created by halvor on 19.02.18.
  */
 public class FeedParser {
+
+    public static final String TAG = FeedParser.class.getName();
 
     @Nullable
     public static Feed parse(InputStream in, int maxItems) throws  XmlPullParserException, IOException {
@@ -62,6 +65,16 @@ public class FeedParser {
         return text;
     }
 
+    public static String readAttribute(XmlPullParser parser, String tag, String attribute) throws XmlPullParserException, IOException {
+            String value = parser.getAttributeValue(null, attribute);
+            Log.d(TAG + ".readAttribute", "value: "+value);
+            Log.d(TAG + ".readAttribute", "getName() "+parser.getName());
+            Log.d(TAG + ".readAttribute", "getInputEncoding() "+parser.getInputEncoding());
+            Log.d(TAG + ".readAttribute", "getPrefix() "+parser.getPrefix());
+            Log.d(TAG + ".readAttribute", "getText() "+parser.getText());
+        return "";
+    }
+
     /**
      * @param parser - current parser in the state where the current tag is the one you want to skip
      * @throws XmlPullParserException
@@ -70,8 +83,10 @@ public class FeedParser {
      * See <a href="https://developer.android.com/training/basics/network-ops/xml.html#skip">
      */
     public static void skipTag(XmlPullParser parser) throws XmlPullParserException, IOException {
+
+
         if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException(parser.getName() + " TAG: " + parser.getEventType());
+            throw new IllegalStateException(parser.getName() + " TAG: " + parser.getEventType() +"\n" + parser.getText());
         }
         int depth = 1;
         while (depth != 0) {

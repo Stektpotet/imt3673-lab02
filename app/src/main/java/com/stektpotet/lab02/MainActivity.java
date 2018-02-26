@@ -1,29 +1,23 @@
 package com.stektpotet.lab02;
 
-import android.content.ContentProvider;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
-import android.net.http.HttpResponseCache;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stektpotet.lab02.parser.Feed;
-
-import java.io.File;
-import java.io.IOException;
+import com.stektpotet.lab02.parser.RSS.RSSFeed;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,11 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mFetchButton;
     private ListView mFeedPostList;
     private TextView mFeedTitle, mFeedDescription;
+    private ProgressBar mProgressBar;
 
     FeedListAdapter mFeedPostListAdapter;
 
     public static final String KEY_ACTIVE_FEED = "ActiveFeed";
-    private FeedFetcherClock fetcherClock;
+    public static final String KEY_ITEM_INDEX = "FeedItemIndex";
+    private FeedFetcherClock mFetcherClock;
 
     private FeedFetcherSignalReceiver mFeedFetcherSignalReceiver;
     private Feed mActiveFeed;
@@ -50,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         mFeedPostList = findViewById(R.id.main_list_feed);
         mFeedPostList.setOnItemClickListener(mFeedPostListClickListener);
 
+        mProgressBar = findViewById(R.id.main_progressBar);
+
         mFeedPostListAdapter = new FeedListAdapter(getApplicationContext(), R.layout.feed_list_item);
         mFeedPostList.setAdapter(mFeedPostListAdapter);
 
@@ -59,11 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mFeedTitle = findViewById(R.id.main_txt_feed_title);
         mFeedDescription = findViewById(R.id.main_txt_feed_desc);
 
-        //Set up intent...
-//        feedFetcherServiceIntent = new Intent(MainActivity.this, FeedFetcherService.class);
-//        feedFetcherServiceIntent.setAction(Intent.ACTION_GET_CONTENT); //TODO verify this action
-//        feedFetcherServiceIntent.setFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);
-//        startService(feedFetcherServiceIntent);
+
         mFeedFetcherSignalReceiver = new FeedFetcherSignalReceiver(
                 new Runnable() {
                     @Override
@@ -75,30 +69,31 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        registerReceiver(mFeedFetcherSignalReceiver, new IntentFilter(FeedFetcherService.ACTION_FEED_FETCH_COMPLETE));
+        IntentFilter feedFetcherIntentFilter = new IntentFilter();
+        feedFetcherIntentFilter.addAction(FeedFetcherSignalReceiver.ACTION_FEED_FETCH_COMPLETE);
+        feedFetcherIntentFilter.addAction(FeedFetcherSignalReceiver.ACTION_FEED_FETCH_FIND_CACHE);
 
+        registerReceiver(mFeedFetcherSignalReceiver, feedFetcherIntentFilter);
         startFetchClock();
 
-        refreshFeed();
+        Intent openCachedFeedIntent = new Intent(FeedFetcherSignalReceiver.ACTION_FEED_FETCH_FIND_CACHE);
+        sendBroadcast(openCachedFeedIntent);
     }
 
 
     private void startFetchClock() {
-
         String frequency = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext())
                 .getString(SettingsActivity.PREF_FEED_ENTRY_FREQUENCY, "10");
 
-        fetcherClock = new FeedFetcherClock(getApplicationContext());
+        mFetcherClock = new FeedFetcherClock(getApplicationContext());
         Intent feedFetchIntent = new Intent(getApplicationContext(), FeedFetcherService.class);
         feedFetchIntent.setAction(FeedFetcherService.ACTION_FEED_FETCH);
-        fetcherClock.setAlarm(feedFetchIntent,Long.valueOf(frequency)*6000L);
-
-        Toast.makeText(this, "Alarm set!", Toast.LENGTH_LONG).show();
+        mFetcherClock.setAlarm(feedFetchIntent,Long.valueOf(frequency)*6000L);
     }
 
     private void stopFetchClock() {
-        fetcherClock.cancelAlarm();
+        mFetcherClock.cancelAlarm();
     }
 
     //TODO look into using a Singleton for app preferences for all activities to get access
@@ -115,6 +110,13 @@ public class MainActivity extends AppCompatActivity {
     private void updateMetaDataFields() {
         mFeedTitle.setText(mActiveFeed.title);
         mFeedDescription.setText(mActiveFeed.link);
+        if(mActiveFeed instanceof RSSFeed) {
+            RSSFeed feed =(RSSFeed) mActiveFeed;
+            if(!feed.description.equals("")){
+                mFeedDescription.setText(feed.description);
+            }
+        }
+
         mFeedPostListAdapter.clear();
         mFeedPostListAdapter.addAll(mActiveFeed.elements);
     }
@@ -131,10 +133,10 @@ public class MainActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent feedEntryDisplayIndent = new Intent(MainActivity.this, DisplayActivity.class);
             feedEntryDisplayIndent.putExtra(KEY_ACTIVE_FEED, mActiveFeed);
-            startActivity(new Intent(MainActivity.this, DisplayActivity.class));
+            feedEntryDisplayIndent.putExtra(KEY_ITEM_INDEX, i);
+            startActivity(feedEntryDisplayIndent);
         }
     };
-
     /**
      * Refresh the RSS/Atom feed list.
      **/
