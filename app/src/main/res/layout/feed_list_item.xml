@@ -12,12 +12,14 @@
         android:id="@+id/feed_item_title"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/light_colorAccent" />
+        android:textColor="@color/light_colorAccent"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/feed_item_preview"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/light_colorPrimary" />
+        android:textColor="@color/light_colorPrimary"
+        android:textSize="12sp"/>
 
 </LinearLayout>

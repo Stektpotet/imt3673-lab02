@@ -28,10 +28,8 @@ import java.net.URLConnection;
 
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions and extra parameters.
+ * An {@link IntentService}
+ * that handles fetching the feed [RSS2/Atom] from a url, and storing it in a cache file.
  */
 public class FeedFetcherService extends IntentService {
 
@@ -39,10 +37,6 @@ public class FeedFetcherService extends IntentService {
 
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String ACTION_FEED_FETCH = "com.stektpotet.lab02.action.FEED_FETCH";
-
-    // TODO: Rename parameters
-    public static final String EXTRA_PARAM1 = "com.stektpotet.lab02.extra.PARAM1";
-    public static final String EXTRA_PARAM2 = "com.stektpotet.lab02.extra.PARAM2";
 
     public FeedFetcherService() {
         super("FeedFetcherService");
@@ -55,8 +49,6 @@ public class FeedFetcherService extends IntentService {
         if(intent.getAction() == null) {
             intent.setAction("NULL"); //RIP
             Log.w(TAG + ".handleIntent", "Started service without an action!!!");
-
-
         }
         switch (intent.getAction()) {
             case ACTION_FEED_FETCH:
@@ -107,7 +99,6 @@ public class FeedFetcherService extends IntentService {
         File file = null;
         FileOutputStream writeFileStream;
         try {
-            // TODO: DELETE PREVIOUS BEFORE WRITE IF EXISTS
 
             File feedCacheDir = new File(getApplicationContext().getCacheDir(), "feed");
             if(!feedCacheDir.exists()) {

@@ -45,8 +45,4 @@ public abstract class FeedEntry implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(link);
     }
-
-    //T readEntry(XmlPullParser parser) throws IOException, XmlPullParserException;
-// TODO: look into possibilities here, this method should be interfaced, but as a static...
-    // For now, let's just pretend it's interfaced.
 }

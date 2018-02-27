@@ -49,8 +49,4 @@ public abstract class Feed<T extends FeedEntry> implements Parcelable {
         parcel.writeString(link);
         parcel.writeList(elements);
     }
-
-    // public abstract T read(XmlPullParser parser, int maxItems) throws XmlPullParserException, IOException;
-// TODO: look into possibilities here, this method should be interfaced, but as a static...
-    // For now, let's just pretend it's interfaced.
 }

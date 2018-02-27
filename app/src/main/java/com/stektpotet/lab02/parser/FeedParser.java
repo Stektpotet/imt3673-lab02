@@ -83,8 +83,6 @@ public class FeedParser {
      * See <a href="https://developer.android.com/training/basics/network-ops/xml.html#skip">
      */
     public static void skipTag(XmlPullParser parser) throws XmlPullParserException, IOException {
-
-
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException(parser.getName() + " TAG: " + parser.getEventType() +"\n" + parser.getText());
         }

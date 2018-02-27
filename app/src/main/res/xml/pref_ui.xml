@@ -4,7 +4,8 @@
     <SwitchPreference
         android:title="Dark-Mode"
         android:key="dark_mode"
-        android:defaultValue="1"
+        android:defaultValue="true"
+        android:summary="Not implemented"
         />
 
 </PreferenceScreen>

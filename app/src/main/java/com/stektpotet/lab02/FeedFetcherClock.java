@@ -36,8 +36,8 @@ public class FeedFetcherClock {
 
         mAlarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis()+1000,
-                frequency, //TODO set this to the actual wanted refresh rate.
+                System.currentTimeMillis(), //Kick start right now
+                frequency, //then repeat at this frequency
                 mAlarmIntent);
     }
 

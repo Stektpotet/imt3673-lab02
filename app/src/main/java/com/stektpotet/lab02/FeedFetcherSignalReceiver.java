@@ -40,14 +40,23 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
 
     public static final String TAG = FeedFetcherSignalReceiver.class.getName();
 
-    private Runnable updateCallback;
+
+    interface FeedFetcherCallbacks {
+
+        void onProcessFeedStart();
+        void onProcessedFeedFinished();
+        void onProcessedFeedFailed();
+        void onProgress(int value);
+    }
+    FeedFetcherCallbacks mCallbacks;
+
     public Feed lastProcessedFeed;
-    public FeedFetcherSignalReceiver(Runnable callback) {
-        updateCallback = callback;
+    public FeedFetcherSignalReceiver(FeedFetcherCallbacks callbacks) {
+        mCallbacks = callbacks;
     }
 
-    public static final String ACTION_FEED_FETCH_COMPLETE ="com.stektpotet.lab02.action.FEED_FETCH_COMPLETE";
-    public static final String ACTION_FEED_FETCH_FIND_CACHE ="com.stektpotet.lab02.action.FEED_FETCH_FIND_CACHE";
+    public static final String ACTION_FEED_FETCH_COMPLETE = "com.stektpotet.lab02.action.FEED_FETCH_COMPLETE";
+    public static final String ACTION_FEED_FETCH_FIND_CACHE = "com.stektpotet.lab02.action.FEED_FETCH_FIND_CACHE";
 
     public static final String PARAM_FEED_FILE_PATH = TAG + ".extras.PARAM_FEED_FILE_PATH";
 
@@ -58,7 +67,6 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
                 .getDefaultSharedPreferences(context)
                 .getString(SettingsActivity.PREF_FEED_ENTRY_LIMIT, "10");
 
-        //TODO: use intentActions
         switch (intent.getAction())
         {
             case ACTION_FEED_FETCH_COMPLETE:
@@ -86,7 +94,9 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
                         }
                     }
                     new FeedProcessor().execute(mostRecent.getPath(), itemMax);
+                    break;
                 }
+                mCallbacks.onProcessedFeedFailed();
                 break;
         }
 
@@ -100,42 +110,55 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mCallbacks.onProcessFeedStart();
         }
 
         @Override
         protected Feed doInBackground(String... strings) {
             //strings[0] filePath
+            publishProgress(25);
+
             Feed result = null;
             String filePath = strings[0];
             int itemMax = Integer.valueOf(strings[1]);
             Log.i(TAG + ".Processor.work.filePath", filePath);
             Log.i(TAG + ".Processor.work.itemMax", strings[1] + " - " + itemMax);
             try {
+                Thread.sleep(10);
                 InputStream inStream = new FileInputStream(filePath);
+                publishProgress(50);
                 result = FeedParser.parse(inStream,itemMax);
+                Thread.sleep(10);
+                publishProgress(75);
+                Thread.sleep(10);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             if (result == null) {
                 Log.e(TAG + ".Processor.work.result", "Failed getting feed parsed");
+                mCallbacks.onProcessedFeedFailed();
             }
+            publishProgress(0);
             return result;
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
+            mCallbacks.onProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(Feed feed) {
             super.onPostExecute(feed);
             lastProcessedFeed = feed;
-            updateCallback.run();
+            mCallbacks.onProcessedFeedFinished();
         }
     }
 }

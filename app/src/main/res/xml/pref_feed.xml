@@ -2,11 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <EditTextPreference android:title="RSS Feed"
+    <EditTextPreference android:title="Feed URL"
         android:key="feed_src"
         android:inputType="textEmailAddress"
         android:defaultValue="@string/pref_feed_default_src"
-        android:summary="Please provide a RSS/Atom feed URL"/>
+        android:summary="Not set"
+        android:dialogTitle="Set feed"
+        android:dialogMessage="Please provide a valid RSS 2.0 or Atom feed URL"/>
 
     <ListPreference android:title="Number of posts"
         android:dependency="feed_src"
@@ -14,14 +16,14 @@
         android:key="feed_post_limit"
         android:entries="@array/pref_feed_fetch_count"
         android:entryValues="@array/pref_feed_fetch_count"
-        android:summary="@string/pref_feed_fetch_count_desc"/>
+        android:summary="@string/pref_feed_desc_fetch_count"/>
 
 
     <SwitchPreference
         android:dependency="feed_src"
         android:key="feed_auto_fetch"
         android:title="@string/pref_feed_auto_fetch"
-        />
+        android:summary="Not implemented"/>
 
     <ListPreference
         android:dependency="feed_auto_fetch"
@@ -30,7 +32,7 @@
         android:key="feed_post_frequency"
         android:entries="@array/pref_rss_fetch_frequency"
         android:entryValues="@array/pref_rss_fetch_frequency_values"
-        android:summary="@string/pref_feed_fetch_count_desc"/>
+        android:summary="@string/pref_feed_desc_fetch_count"/>
 
 
     <!--android:summary="@string/pref_feed_auto_fetch_description"-->

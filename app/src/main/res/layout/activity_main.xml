@@ -6,21 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.stektpotet.lab02.MainActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="3dp">
-
-        <ProgressBar
-            android:id="@+id/main_progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_gravity="top"
-            android:layout_marginTop="-3dp"
-            android:progress="20"
-            android:visibility="invisible" />
-    </FrameLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,19 +40,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_txt_feed_title" />
 
+        <View
+            android:layout_marginTop="2dp"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@color/dark_colorPrimaryDark"
+            />
+
         <ListView
             android:id="@+id/main_list_feed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:entries="@array/some_data"
+            android:background="@color/dark_colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         </ListView>
+
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp">
+
+        <ProgressBar
+            android:id="@+id/main_progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="-3dp"
+            android:progress="20"
+ />
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/main_fab_fetch"

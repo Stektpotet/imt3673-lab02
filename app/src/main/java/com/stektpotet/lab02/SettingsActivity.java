@@ -3,6 +3,8 @@ package com.stektpotet.lab02;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,11 +34,14 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    public static final String TAG = SettingsActivity.class.getName();
+
     public static final String PREF_FEED_SOURCE = "feed_src";
     public static final String PREF_FEED_AUTO_FETCH = "feed_auto_fetch";
     public static final String PREF_FEED_ENTRY_LIMIT = "feed_post_limit";
     public static final String PREF_FEED_ENTRY_FREQUENCY = "feed_post_frequency";
 
+    public static final String ACTION_UPDATED_SETTINGS = "com.stektpotet.lab02.action.UPDATED_SETTINGS";
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -50,6 +55,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //                return false;
 //            }
             updatePreferenceSummary(preference, preferenceValueString);
+
             Log.d("PREF.updateDependent", "RETURN TRUE");
             return true;
         }
@@ -138,8 +144,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             if (!super.onMenuItemSelected(featureId, item)) {
-
-                NavUtils.navigateUpFromSameTask(this);
+                Intent upIntent = new Intent(this, MainActivity.class);
+                upIntent.setAction(ACTION_UPDATED_SETTINGS);
+                NavUtils.navigateUpTo(this, upIntent);
             }
             return true;
         }
@@ -219,10 +226,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_ui);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
+
             //bindPreferenceSummaryToValue(findPreference("dark_mode"));
         }
 

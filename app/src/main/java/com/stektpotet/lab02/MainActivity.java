@@ -2,10 +2,12 @@ package com.stektpotet.lab02;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,13 +61,33 @@ public class MainActivity extends AppCompatActivity {
 
 
         mFeedFetcherSignalReceiver = new FeedFetcherSignalReceiver(
-                new Runnable() {
+                new FeedFetcherSignalReceiver.FeedFetcherCallbacks() {
                     @Override
-                    public void run() {
+                    public void onProcessFeedStart() {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onProcessedFeedFinished() {
                         mActiveFeed = mFeedFetcherSignalReceiver.lastProcessedFeed;
                         if(mActiveFeed != null) {
                             updateMetaDataFields();
                         }
+                        mProgressBar.setVisibility(View.GONE);
+                        Log.d(TAG+".callback", "Finished processing feed...");
+                    }
+
+                    @Override
+                    public void onProcessedFeedFailed() {
+                        Toast.makeText(getApplicationContext(), "Failed processing feed...", Toast.LENGTH_LONG).show();
+                        Log.d(TAG+".callback", "Failed processing feed...");
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onProgress(int value) {
+                        mProgressBar.setProgress(value);
+                        Log.i(TAG, "progress: "+value);
                     }
                 }
         );
@@ -89,22 +111,29 @@ public class MainActivity extends AppCompatActivity {
         mFetcherClock = new FeedFetcherClock(getApplicationContext());
         Intent feedFetchIntent = new Intent(getApplicationContext(), FeedFetcherService.class);
         feedFetchIntent.setAction(FeedFetcherService.ACTION_FEED_FETCH);
-        mFetcherClock.setAlarm(feedFetchIntent,Long.valueOf(frequency)*6000L);
+        mFetcherClock.setAlarm(feedFetchIntent,Long.valueOf(frequency)*60000L);
     }
 
     private void stopFetchClock() {
         mFetcherClock.cancelAlarm();
     }
 
-    //TODO look into using a Singleton for app preferences for all activities to get access
-    // OR
-    //TODO look into using onResume for updating preference state in activity
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        if(getIntent().getAction() == SettingsActivity.ACTION_UPDATED_SETTINGS) {
+            refreshFeed();
+            stopFetchClock();
+            startFetchClock();
+        }
     }
 
     private void updateMetaDataFields() {
@@ -141,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
      * Refresh the RSS/Atom feed list.
      **/
     private void refreshFeed() {
-        //TODO Fetch the feed
         Toast.makeText(getBaseContext(), "Fetching...",Toast.LENGTH_LONG).show();
 
         Intent feedFetcherIntent = new Intent(this, FeedFetcherService.class);
@@ -169,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 refreshFeed();
                 return true;
             case R.id.action_about:
+                Toast.makeText(getBaseContext(), "Not Implemented!",Toast.LENGTH_LONG).show();
             default:
                 return super.onOptionsItemSelected(item);
         }

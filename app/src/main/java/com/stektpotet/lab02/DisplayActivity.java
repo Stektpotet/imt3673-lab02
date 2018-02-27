@@ -1,5 +1,6 @@
 package com.stektpotet.lab02;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -22,6 +23,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.stektpotet.lab02.parser.Feed;
 import com.stektpotet.lab02.parser.FeedEntry;
@@ -95,14 +97,20 @@ public class DisplayActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId())
+        {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                //OPEN PREFERENCES ACTIVITY
+                return true;
+            case R.id.action_refresh:
+                Toast.makeText(getBaseContext(), "Not Implemented!",Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_about:
+                Toast.makeText(getBaseContext(), "Not Implemented!",Toast.LENGTH_LONG).show();
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
