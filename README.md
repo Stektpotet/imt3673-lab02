@@ -10,18 +10,18 @@ The user should be able to specify in the preferences the URL to the RSS feed (R
 
 ## Checklist
 
-- [ ] The git repository URL is correctly provided, such that command works: `git clone <url>` 
+- [x] The git repository URL is correctly provided, such that command works: `git clone <url>` 
 
-- [ ] The code is well, logically organised and structured into appropriate classes. Everything should be in a single package.
+- [x] The code is well, logically organised and structured into appropriate classes. Everything should be in a single package.
 
-- [ ] It is clear to the user what RSS feed formats are supported (RSS2.0 and/or Atom)
+- [x] It is clear to the user what RSS feed formats are supported (RSS2.0 and/or Atom)
 - [x] The user can go to Preferences and set the URL of the RSS feed.
 - [x] The user can go to Preferences and set the feed item limit.
 - [x] The user can go to Preferences and set the feed refresh frequency.
-- [ ] The user can see the list of items from the feed on the home Activity ListView.
-- [ ] The user can go to a particular item by clicking on it. The content will be displayed in newly open activity. The back button puts the user back onto the main ListView activity to select another item. 
-- [ ] The user can press the back button from the main activity to quit the app. 
-- [ ] When the content article has graphics, it is rendered correctly. 
+- [x] The user can see the list of items from the feed on the home Activity ListView.
+- [x] The user can go to a particular item by clicking on it. The content will be displayed in newly open activity. The back button puts the user back onto the main ListView activity to select another item. 
+- [x] The user can press the back button from the main activity to quit the app. 
+- [x] When the content article has graphics, it is rendered correctly. 
 
 ## Hints
 
