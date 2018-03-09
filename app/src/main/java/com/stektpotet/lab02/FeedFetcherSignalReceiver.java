@@ -89,7 +89,7 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
                     File mostRecent = files[0];
 
                     for(File f : files) {
-                        if(f.lastModified() < mostRecent.lastModified()) {
+                        if(f.lastModified() > mostRecent.lastModified()) {
                             mostRecent = f;
                         }
                     }

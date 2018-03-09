@@ -128,11 +128,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        String intentAction = getIntent().getAction();
 
-        if(getIntent().getAction() == SettingsActivity.ACTION_UPDATED_SETTINGS) {
+        if( intentAction.equals(SettingsActivity.ACTION_UPDATED_SETTINGS) ) {
             refreshFeed();
             stopFetchClock();
             startFetchClock();
+        } else {
+            Intent openCachedFeedIntent = new Intent(FeedFetcherSignalReceiver.ACTION_FEED_FETCH_FIND_CACHE);
+            sendBroadcast(openCachedFeedIntent);
         }
     }
 
