@@ -23,6 +23,7 @@
 
     <SwitchPreference
         android:dependency="feed_src"
+        android:defaultValue="true"
         android:key="feed_auto_fetch"
         android:title="@string/pref_feed_auto_fetch"
         android:summary="Disabling is not implemented"/>

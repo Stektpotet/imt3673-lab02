@@ -3,8 +3,8 @@
 
     <!-- RSS FEED strings -->
         <!-- missing data defaults -->
-    <string name="feed_title_missing">Feed missing title&#8230;</string>
-    <string name="feed_description_missing">Feed missing description&#8230;</string>
+    <string name="feed_title_missing">No feed found&#8230;</string>
+    <string name="feed_description_missing">Feed missing description&#8230;\nSet the feed in preferences </string>
     <string name="feed_post_title_missing">Post missing title&#8230;</string>
 
     <!-- Strings related to Settings -->

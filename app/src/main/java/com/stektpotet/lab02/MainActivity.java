@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mFeedPostList.setOnItemClickListener(mFeedPostListClickListener);
 
         mProgressBar = findViewById(R.id.main_progressBar);
+        mProgressBar.setVisibility(View.GONE);
 
         mFeedPostListAdapter = new FeedListAdapter(getApplicationContext(), R.layout.feed_list_item);
         mFeedPostList.setAdapter(mFeedPostListAdapter);

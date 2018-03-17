@@ -67,7 +67,9 @@ public class FeedFetcherService extends IntentService {
         if(networkInfo != null && networkInfo.isConnected()) {
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            String prefFeedSource = sharedPreferences.getString(SettingsActivity.PREF_FEED_SOURCE, null);
+
+            String prefFeedSource = sharedPreferences.getString(SettingsActivity.PREF_FEED_SOURCE, getResources().getString( R.string.pref_feed_default_src));
+
             Log.d(TAG+".onReceive.feedSource", prefFeedSource);
 
             try {
