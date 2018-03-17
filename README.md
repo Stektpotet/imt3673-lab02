@@ -2,6 +2,7 @@
 
 **NOTE**:
 In my Atom/RSS-parser I've only considered the tags I myself considered valuable for this lab. meaning ID/Link, summary/description, title + feed title and url.
+Some of the preferences I've added are not fully implemented, I've kept the UI elements in the preference menu just to get an overview of how the app would potentially shape out to be something useful. most notably one such _not fully implemented_ feature is the ability to turn on and off the Automatic feed-fetching. toggling this for now only enables/disables the dependent feature preferences but not the actual features themselves. in other words: you CANNOT turn of automatic feed-fetching, meaning the switch only disables/enables the ability to change feed-fetching frequency.
 
 ## The idea
 
