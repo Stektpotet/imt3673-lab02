@@ -102,6 +102,7 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
     }
 
     public class FeedProcessor extends AsyncTask<String, Integer, Feed> {
+        Boolean failed = false;
 
         @Override
         protected void onPreExecute() {
@@ -112,6 +113,7 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
         @Override
         protected Feed doInBackground(String... strings) {
             //strings[0] filePath
+            failed = false;
             publishProgress(25);
 
             Feed result = null;
@@ -137,8 +139,8 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             if (result == null) {
-                Log.e(TAG + ".Processor.work.result", "Failed getting feed parsed");
-                mCallbacks.onProcessedFeedFailed();
+                Log.w(TAG + ".Processor.work.result", "Failed getting feed parsed");
+                failed = true;
             }
             publishProgress(0);
             return result;
@@ -153,6 +155,10 @@ public class FeedFetcherSignalReceiver extends BroadcastReceiver {
         @Override
         protected void onPostExecute(Feed feed) {
             super.onPostExecute(feed);
+            if(failed) {
+                mCallbacks.onProcessedFeedFailed();
+                return;
+            }
             lastProcessedFeed = feed;
             mCallbacks.onProcessedFeedFinished();
         }

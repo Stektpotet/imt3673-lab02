@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
      * Refresh the RSS/Atom feed list.
      **/
     private void refreshFeed() {
-        Toast.makeText(getBaseContext(), "Fetching...",Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Fetching...",Toast.LENGTH_SHORT).show();
 
         Intent feedFetcherIntent = new Intent(this, FeedFetcherService.class);
         feedFetcherIntent.setAction(FeedFetcherService.ACTION_FEED_FETCH);

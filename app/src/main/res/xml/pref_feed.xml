@@ -8,7 +8,9 @@
         android:defaultValue="@string/pref_feed_default_src"
         android:summary="Not set"
         android:dialogTitle="Set feed"
-        android:dialogMessage="Please provide a valid RSS 2.0 or Atom feed URL"/>
+        android:dialogMessage="Please provide a valid RSS 2.0 or Atom feed URL"
+
+        />
 
     <ListPreference android:title="Number of posts"
         android:dependency="feed_src"

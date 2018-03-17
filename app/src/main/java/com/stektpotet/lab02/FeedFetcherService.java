@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.DebugUtils;
 import android.util.Log;
+import android.webkit.URLUtil;
 import android.widget.Toast;
 
 import java.io.File;
@@ -71,6 +72,7 @@ public class FeedFetcherService extends IntentService {
 
             try {
                 URL feedSource = new URL(prefFeedSource);
+
                 InputStream inStream = feedSource.openConnection().getInputStream();
                 File feedFile = cacheFeed(inStream);
                 inStream.close();

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.webkit.URLUtil;
 
 import java.util.List;
 
@@ -63,34 +65,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 preference.setSummary(  (Boolean)value ?
                                         R.string.pref_feed_auto_fetch_summary_on :
                                         R.string.pref_feed_auto_fetch_summary_off);
+            } else if (preference instanceof EditTextPreference) {
+                EditTextPreference textPreference = (EditTextPreference)preference;
+                if(textPreference.getKey().equals(PREF_FEED_SOURCE)) {
+                    preferenceValueString = helpUserValidateURL(textPreference, preferenceValueString);
+                }
+                preference.setSummary(preferenceValueString);
             } else {
                 preference.setSummary(preferenceValueString);
             }
-
-            updatePreferenceSummary(preference, preferenceValueString);
-
-            Log.d("PREF.updateDependent", "RETURN TRUE");
             return true;
         }
 
-        private boolean updateDependentPreferences(Preference preference, String value) {
-            switch (preference.getKey())
-            {
-//                case PREF_FEED_SOURCE:
-//                    Log.d("PREF.updateDependent.url", value);
-//                    boolean validURL = Patterns.WEB_URL.matcher(value).matches(); //TODO: use URLUtils
-//                    preference.notifyDependencyChange(!validURL);
-//                    return validURL;
-                default:
-
-                    Log.d("PREF.updateDependent."+preference.getKey(), value);
-                    return true;
-            }
+        private String helpUserValidateURL(EditTextPreference preference, String value) {
+            Log.i(TAG+".validateURL", value);
+            String suggestedURL = URLUtil.guessUrl(value);
+            Log.i(TAG+".validateURL.suggested", suggestedURL);
+            preference.setText(suggestedURL);
+            return suggestedURL;
         }
 
-        private void updatePreferenceSummary(Preference preference, String value) {
-
-        }
 
     };
 
