@@ -38,11 +38,7 @@ public class FeedListAdapter extends ArrayAdapter<FeedEntry> {
         TextView preview = (TextView) convertView.findViewById(R.id.feed_item_preview);
         // Populate the data into the template view using the data object
         title.setText(item.title);
-        if(item instanceof RSSEntry) {
-            preview.setText(((RSSEntry)item).description);
-        } else {
-            preview.setText(item.link);
-        }
+        preview.setText(item.description);
         // Return the completed view to render on screen
         return convertView;
     }

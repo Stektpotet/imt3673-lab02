@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by halvor on 22.02.18.
- */
 
 public abstract class Feed<T extends FeedEntry> implements Parcelable {
 

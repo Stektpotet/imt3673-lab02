@@ -21,22 +21,23 @@ public class RSSEntry extends FeedEntry implements Parcelable {
     public static final String TAG_ITEM = "item";
     public static final String TAG_DESCRIPTION = "description";
 
-    public final String description;
 
     RSSEntry(String... args) {
-        super(args[0], args[1]);
-        description = args[2];
+        super(args[0], args[1], args[2]);
     }
 
     public RSSEntry(Parcel in) {
         super(in);
-        description = in.readString();
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        super.writeToParcel(parcel, i);
-        parcel.writeString(description);
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<RSSEntry> CREATOR = new Creator<RSSEntry>() {

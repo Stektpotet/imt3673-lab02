@@ -155,6 +155,7 @@ public class DisplayActivity extends AppCompatActivity {
 
             final DisplayActivity activity = (DisplayActivity) getActivity();
 
+
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -165,6 +166,7 @@ public class DisplayActivity extends AppCompatActivity {
             });
 
             webView.setWebChromeClient(new WebChromeClient() {
+
                 @Override
                 public void onProgressChanged(WebView view, int newProgress) {
                     super.onProgressChanged(view, newProgress);
@@ -176,6 +178,7 @@ public class DisplayActivity extends AppCompatActivity {
                     }
                 }
             });
+
             webView.loadUrl(mLink);
             return rootView;
         }

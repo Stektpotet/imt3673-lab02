@@ -23,16 +23,19 @@ public abstract class FeedEntry implements Parcelable {
 
     public final String title;
     public final String link;
+    public final String description;
 
-    protected FeedEntry(String title, String link) {
+    protected FeedEntry(String title, String link, String description) {
         this.title = title;
         this.link = link;
+        this.description = description;
     }
 
 
     protected FeedEntry(Parcel in) {
         title = in.readString();
         link = in.readString();
+        description = in.readString();
     }
 
     @Override
@@ -44,5 +47,6 @@ public abstract class FeedEntry implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
         parcel.writeString(link);
+        parcel.writeString(description);
     }
 }

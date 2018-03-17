@@ -18,11 +18,12 @@ import java.io.IOException;
 public class AtomEntry extends FeedEntry {
 
     public static final String TAG_ENTRY = "entry";
+    public static final String TAG_SUMMARY = "summary";
     public static final String TAG_CONTRIBUTOR = "contributor";
     public static final String TAG_RIGHTS = "rights";
 
-    AtomEntry(String title, String link) {
-        super(title, link);
+    AtomEntry(String title, String link, String summary) {
+        super(title, link, summary);
     }
 
     public AtomEntry(Parcel in) { super(in); }

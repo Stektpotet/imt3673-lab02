@@ -23,7 +23,7 @@
         android:dependency="feed_src"
         android:key="feed_auto_fetch"
         android:title="@string/pref_feed_auto_fetch"
-        android:summary="Not implemented"/>
+        android:summary="Disabling is not implemented"/>
 
     <ListPreference
         android:dependency="feed_auto_fetch"

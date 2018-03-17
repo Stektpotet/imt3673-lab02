@@ -66,13 +66,8 @@ public class FeedParser {
     }
 
     public static String readAttribute(XmlPullParser parser, String tag, String attribute) throws XmlPullParserException, IOException {
-            String value = parser.getAttributeValue(null, attribute);
-            Log.d(TAG + ".readAttribute", "value: "+value);
-            Log.d(TAG + ".readAttribute", "getName() "+parser.getName());
-            Log.d(TAG + ".readAttribute", "getInputEncoding() "+parser.getInputEncoding());
-            Log.d(TAG + ".readAttribute", "getPrefix() "+parser.getPrefix());
-            Log.d(TAG + ".readAttribute", "getText() "+parser.getText());
-        return "";
+            parser.nextTag();
+        return parser.getAttributeValue(null, attribute);
     }
 
     /**

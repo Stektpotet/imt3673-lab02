@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -50,10 +51,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String preferenceValueString = value.toString();
-//            if(!updateDependentPreferences(preference, preferenceValueString)) {
-//                Log.d("PREF.updateDependent", "RETURN FALSE");
-//                return false;
-//            }
+            if (preference instanceof ListPreference) {
+                // For list preferences, look up the correct display value in
+                // the preference's 'entries' list.
+                ListPreference listPreference = (ListPreference) preference;
+                int index = listPreference.findIndexOfValue(preferenceValueString);
+
+                // Set the summary to reflect the new value.
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+            } else if (preference instanceof SwitchPreference){
+                preference.setSummary(  (Boolean)value ?
+                                        R.string.pref_feed_auto_fetch_summary_on :
+                                        R.string.pref_feed_auto_fetch_summary_off);
+            } else {
+                preference.setSummary(preferenceValueString);
+            }
+
             updatePreferenceSummary(preference, preferenceValueString);
 
             Log.d("PREF.updateDependent", "RETURN TRUE");
@@ -77,17 +90,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         private void updatePreferenceSummary(Preference preference, String value) {
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(value);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-            } else {
-                preference.setSummary(value);
-            }
         }
 
     };
@@ -116,10 +118,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         // Trigger the listener immediately with the preference's
         // current value.
-        preferenceChangeListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        if(preference instanceof SwitchPreference) {
+            preferenceChangeListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getBoolean(preference.getKey(), true));
+        } else {
+            preferenceChangeListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+        }
+
     }
 
     @Override
@@ -200,7 +210,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_SOURCE));
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_LIMIT));
             bindPreferenceSummaryToValue(findPreference(PREF_FEED_ENTRY_FREQUENCY));
-            //bindPreferenceSummaryToValue(findPreference("PREF_FEED_AUTO_FETCH")); //TODO learn why this does not need to be done...
+            bindPreferenceSummaryToValue(findPreference(PREF_FEED_AUTO_FETCH)); //TODO learn why this does not need to be done...
         }
 
         @Override

@@ -5,7 +5,7 @@
         android:title="Dark-Mode"
         android:key="dark_mode"
         android:defaultValue="true"
-        android:summary="Not implemented"
+        android:summary="Switching theme not implemented"
         />
 
 </PreferenceScreen>

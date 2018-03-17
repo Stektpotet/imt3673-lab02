@@ -32,10 +32,6 @@ import java.net.URLConnection;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
-/**
- * Created by halvor on 23.02.18.
- */
-
 public class FeedFetcherSignalReceiver extends BroadcastReceiver {
 
     public static final String TAG = FeedFetcherSignalReceiver.class.getName();
