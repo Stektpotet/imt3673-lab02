@@ -1,5 +1,9 @@
 # Lab 02: Simple RSS reader
 
+**NOTE**:
+In my Atom/RSS-parser I've only considered the tags I myself considered valuable for this lab. meaning ID/Link, summary/description, title + feed title and url.
+Some of the preferences I've added are not fully implemented, I've kept the UI elements in the preference menu just to get an overview of how the app would potentially shape out to be something useful. most notably one such _not fully implemented_ feature is the ability to turn on and off the Automatic feed-fetching. toggling this for now only enables/disables the dependent feature preferences but not the actual features themselves. in other words: you CANNOT turn of automatic feed-fetching, meaning the switch only disables/enables the ability to change feed-fetching frequency.
+
 ## The idea
 
 Create an application that allows the user to read content from any RSS feed. The app will consist of 3 activities: one with the list of items (ListView, for selecting content), one for article content display (for reading content), and User Preferences (for user to specify the preferences). 
@@ -23,6 +27,10 @@ The user should be able to specify in the preferences the URL to the RSS feed (R
 - [x] The user can press the back button from the main activity to quit the app. 
 - [x] When the content article has graphics, it is rendered correctly. 
 
+## Additional features I added
+ - Swipable WebView, As the feed is aleardy parsed into parcelable items I figured I might as well send the list on into the display activity so that you can swipe between the articles listed in the main activity. This involved making an additional adapter for a viewpager that also is hooked up with a few callbacks to the webview to update things like the menubar-title.
+ - I'm taking  use of android studio's template preference activity, this means it follows a lot of standard design and that the code in general follows standards for preference implementation (things like updating the summary of a preference item when changing the preference etc.).
+ - I added URL helpers for users, which basically means the app guesses the actual URL for the user if the user has not written a fully _valid_ URL. example: www.nrk.no/trondelag/toppsaker.rss -> http://www.nrk.no/trondelag/toppsaker.rss as, strictly speaking, a scheme must be provided for an URL to be considered valid.
 ## Hints
 
 Make sure that the logic for the fetching of articles is done by the app automatically with the frequency given by the user Preferences. How would you schedule it? 
